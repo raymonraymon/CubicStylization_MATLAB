@@ -68,7 +68,7 @@ bfgs_iters = zeros(N,1);
 for k = 1:MAX_ITER
 
     % serial x-update
-    for i = 1:N,
+    for i = 1:N
         K = C(:,1+(i-1)*m:i*m)';
         x(:,i) = bfgs_update(K, u(:,i), z(:,i), rho, N, x(:,i));
         bfgs_iters(i) = BFGS_ITERS;
@@ -120,7 +120,7 @@ function obj = objective(A, b, mu, x, z)
     obj = sum(log(1 + exp(-A*z(2:end) -b*z(1)))) + m*mu*norm(z(2:end),1);
 end
 
-function [x t] = bfgs_update(C, u, z, rho, N, x0)
+function [x ,t] = bfgs_update(C, u, z, rho, N, x0)
     % solve the x update
     %   minimize [ -logistic(x_i) + (rho/2)||x_i - z^k + u^k||^2 ]
     % via L-BFGS

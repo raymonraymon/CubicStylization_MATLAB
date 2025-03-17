@@ -1,3 +1,9 @@
+close all
+clear
+clc
+dbstop if error
+
+%%
 randn('state', 0);
 rand('state', 0);
 

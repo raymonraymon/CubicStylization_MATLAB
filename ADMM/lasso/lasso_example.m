@@ -1,3 +1,9 @@
+close all
+clear
+clc
+dbstop if error
+
+%%
 randn('seed', 0);
 rand('seed',0);
 
