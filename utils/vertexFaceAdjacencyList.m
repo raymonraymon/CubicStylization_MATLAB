@@ -1,4 +1,4 @@
-function adjF = vertexFaceAdjacency(F)
+function adjF = vertexFaceAdjacencyList(F)
   % VERTEXFACEADJACENCYLIST constructs a list indicates the
   % indices of adjacenct faces
   %

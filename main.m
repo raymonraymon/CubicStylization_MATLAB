@@ -1,8 +1,29 @@
-clear all; close all;
-addpath('./utils')
-
+clear; close all;clc;
+dbstop if error
+addpath([pwd(),'/utils'])
+inputname = './data/dog.obj';
 % read mesh
-[V,F] = load_mesh('./data/bunny.obj');
+n = 3;
+
+switch n
+case 1
+    [V,F] = load_mesh(inputname);%duck ±ªÀ∫¡—£¨≤ª ’¡≤
+    O = orth(rand(3,3));
+    V = V*O;
+case 2
+    [V,F]=subdivided_sphere(3);
+case 3
+    n=10;
+    a=5;
+    [V,F,I] = capsule(n,a);
+otherwise
+    disp('????')    
+end
+    
+
+%
+
+
 nV = size(V,1);
 
 %% Precomputation
@@ -14,7 +35,7 @@ rotData.L = cotmatrix(V,F); % cotangent
 rotData.VA = full(diag(massmatrix(V,F))); % vertex area
 
 % ADMM rotation fitting parameters
-rotData.lambda = 4e-1; % cubeness
+rotData.lambda = 9.9e-1; % cubeness
 rotData.rho = 1e-4;
 rotData.ABSTOL = 1e-5;
 rotData.RELTOL = 1e-3;
@@ -37,7 +58,7 @@ UHis = zeros(size(V,1), size(V,2), maxIter+1);
 UHis(:,:,1) = U; % output vertex history
 objHis = []; % objective history
 
-b = 1000; % pinned down vertices, we have to pin down at least one vertex
+b = floor(nV/3); % pinned down vertices, we have to pin down at least one vertex
 bc = U(b,:);
 
 for iter = 1:maxIter
@@ -69,3 +90,4 @@ end
 %% visualize result
 t = tsurf(F,U, 'EdgeColor', 'black');
 axis equal
+writeOBJ([inputname(1:(end-4)),'_result.obj'],U,F);
